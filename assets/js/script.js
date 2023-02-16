@@ -4,7 +4,6 @@ const greeting = document.querySelector('.greeting');
 const name = document.querySelector('.name');
 const slideNext = document.querySelector('.slide-next');
 const slidePrev = document.querySelector('.slide-prev');
-let posInitial;
 const bgNum  = getRandom().toString().padStart(2, "0");
 const body = document.getElementsByTagName('body')[0];
 let randomNum = parseInt(bgNum);
@@ -130,17 +129,17 @@ function getSlidePrev() {
       if(randomNum - 1  < 10 && randomNum - 1  > 0) {
         randomNum -= 1;
         body.style.backgroundImage = "url('https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/"+timeOfDay+"/"+0+""+randomNum+".jpg')";
-        console.log(randomNum)
+        // console.log(randomNum)
       
       } else if(randomNum - 1  > 0 && randomNum - 1  <= 20 ) {
         randomNum -= 1;
         body.style.backgroundImage = "url('https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/"+timeOfDay+"/"+randomNum+".jpg')";
-        console.log(randomNum)
+        // console.log(randomNum)
       
       } else if (randomNum = 1) {
         randomNum = 20;
         body.style.backgroundImage = "url('https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/"+timeOfDay+"/"+randomNum+".jpg')";
-        console.log(randomNum)
+        // console.log(randomNum)
       
       } else
       body.style.backgroundImage = "url('https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/"+timeOfDay+"/01.jpg')";
@@ -148,3 +147,46 @@ function getSlidePrev() {
 }
 getSlidePrev();
 
+//get Weather
+const weatherIcon = document.querySelector('.weather-icon');
+const temperature = document.querySelector('.temperature');
+const weatherDescription = document.querySelector('.weather-description');
+const wind = document.querySelector('.wind');
+const windDescription = document.querySelector('.wind-description');
+const humidity = document.querySelector('.humidity');
+const humidityDescription = document.querySelector('.humidity-description');
+
+
+
+const city = document.querySelector('.city');
+
+async function getWeather() {
+  const defaultCity = 'Omsk';
+  city.value = defaultCity;
+  let url = `https://api.openweathermap.org/data/2.5/weather?q=${defaultCity}&lang=en&appid=e886c80087ae231689546cb8c0b8857b&units=metric`;
+  let res = await fetch(url);
+  let data = await res.json(); 
+
+  let degrees = Math.ceil(data.main.temp);
+  wind.textContent = `Wind speed: ${data.wind.speed} m/s`;
+  humidity.textContent = `Humidity: ${data.main.humidity}%`;
+  
+  weatherIcon.className = 'weather-icon owf';
+  weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+  temperature.textContent = `${degrees}°C`;
+  weatherDescription.textContent = data.weather[0].description;
+
+  console.log(data.weather[0].id, data.wind.speed, data.main.temp);
+}
+getWeather();
+
+city.addEventListener("change", async getWeather => {
+  url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=e886c80087ae231689546cb8c0b8857b&units=metric`;
+  let res = await fetch(url);
+  let weatherData = await res.json();
+  let degrees = Math.ceil(weatherData.main.temp);
+  weatherIcon.className = 'weather-icon owf';
+  weatherIcon.classList.add(`owf-${weatherData.weather[0].id}`);
+  temperature.textContent = `${degrees}°C`;
+  weatherDescription.textContent = weatherData.weather[0].description;
+});
