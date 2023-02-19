@@ -82,7 +82,6 @@ window.addEventListener('load', getLocalStorage)
 function getRandom() {
   return Math.floor(Math.random() * (20 - 1 + 1)) + 1;
 }
-// console.log(getRandom());
 
 function setBg() {
   const img = new Image();
@@ -190,3 +189,29 @@ city.addEventListener("change", async getWeather => {
   temperature.textContent = `${degrees}°C`;
   weatherDescription.textContent = weatherData.weather[0].description;
 });
+
+// quote of day
+async function getQuotes() {  
+  const quote = document.querySelector(".quote");
+  const author = document.querySelector(".author");
+
+  const quotes = '/assets/data.json';
+  const res = await fetch(quotes);
+  const data = await res.json(); 
+    
+  quote.innerHTML = data[0].text;  
+  author.innerHTML = data[0].author; 
+
+  const btn = document.querySelector(".change-quote");
+
+  btn.addEventListener("click", getQuotes => {
+
+  let randomQuoteIndex = Math.floor(Math.random() * (data.length - 2 + 1)) + 1;
+    console.log(randomQuoteIndex);
+    quote.innerHTML = data[randomQuoteIndex].text;  
+    author.innerHTML = data[randomQuoteIndex].author; 
+    
+  });
+}
+getQuotes();
+
