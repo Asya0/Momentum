@@ -1,3 +1,5 @@
+import playList from "./playList.js";
+
 const time = document.querySelector('.time');
 const data = document.querySelector('.date');
 const greeting = document.querySelector('.greeting');
@@ -39,7 +41,7 @@ showDate()
 function getTimeOfDay() {
   
   const date = new Date();
-  let partOfDay = ['morning', 'afteroon', 'evening', 'night']
+  let partOfDay = ['morning', 'afternoon', 'evening', 'night']
   let hours = date.getHours();
   
     if (hours < 13 ) { 
@@ -175,7 +177,7 @@ async function getWeather() {
   temperature.textContent = `${degrees}°C`;
   weatherDescription.textContent = data.weather[0].description;
 
-  console.log(data.weather[0].id, data.wind.speed, data.main.temp);
+  // console.log(data.weather[0].id, data.wind.speed, data.main.temp);
 }
 getWeather();
 
@@ -215,3 +217,82 @@ async function getQuotes() {
 }
 getQuotes();
 
+// audio player
+const playItem = document.querySelectorAll(".play-item");
+const playBtn = document.querySelector(".play");
+const audio = document.querySelector("audio");
+let isPlay = false;
+let playNum = 0;  // track default
+
+
+// console.log(audio)
+let sounds = ['./assets/sounds/Aqua Caelestis.mp3', './assets/sounds/River Flows In You.mp3', './assets/sounds/Summer Wind.mp3', './assets/sounds/Ennio Morricone.mp3']
+
+function playAudio() {
+  audio.currentTime = 0;
+
+  playBtn.addEventListener("click", () => {
+     
+      if(!isPlay) {
+        playBtn.classList.add("pause");
+        isPlay = true;
+        audio.play();
+        stylePlayItems(1);
+      } else {
+        playBtn.classList.remove("pause");
+        audio.pause();
+        isPlay = false;
+      }
+    })
+}
+playAudio();
+audio.src = './assets/sounds/Aqua Caelestis.mp3';
+
+const btnNext = document.querySelector(".play-next");
+const btnPrev = document.querySelector(".play-prev");
+
+function playNext() {
+  btnNext.addEventListener('click', () => {
+    if (playNum === sounds.length) {
+      playNum = 0;
+    } 
+    audio.src = `${sounds[playNum]}`;
+    isPlay = true;
+    playBtn.classList.add("pause");
+    audio.play();
+    console.log(audio.src)
+    playNum++;
+    stylePlayItems(playNum);
+  })
+}
+playNext();
+
+function playPrev() {
+  btnPrev.addEventListener('click', () => {
+    if (playNum == -1) {
+      playNum = sounds.length - 1;
+
+      styleItem.classList.add(".item-active")
+    }
+    audio.src = `${sounds[playNum]}`;
+    isPlay = true;
+    playBtn.classList.add("pause");
+    audio.play();
+    let ids = playNum--;
+    stylePlayItems(ids);
+  })
+}
+playPrev();
+
+function stylePlayItems(playNum) {
+
+  for(let i = 0; i < playItem.length; i++) {
+    playItem[i].classList.remove('item-active');
+  }
+
+  playItem[playNum].classList.add("item-active");
+}
+
+//progress-bar
+const progressContainer = document.querySelector(".progress-container");
+const progress = document.querySelector(".progress");
