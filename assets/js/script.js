@@ -4,13 +4,13 @@ const time = document.querySelector('.time');
 const data = document.querySelector('.date');
 const greeting = document.querySelector('.greeting');
 const name = document.querySelector('.name');
+const city = document.querySelector('.city');
 const slideNext = document.querySelector('.slide-next');
 const slidePrev = document.querySelector('.slide-prev');
 const bgNum  = getRandom().toString().padStart(2, "0");
 const body = document.getElementsByTagName('body')[0];
 let randomNum = parseInt(bgNum);
 const timeOfDay = getTimeOfDay();
-
 
 
 // show time in page
@@ -69,6 +69,7 @@ showGreeting();
 function setLocalStorage() {
   localStorage.setItem('name', name.value);
 }
+
 window.addEventListener('beforeunload', setLocalStorage);
 
 function getLocalStorage() {
@@ -77,7 +78,6 @@ function getLocalStorage() {
   }
 }
 window.addEventListener('load', getLocalStorage)
-
 
 // image change slider
 
@@ -95,7 +95,7 @@ function setBg() {
     body.style.backgroundImage = "url('https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/"+timeOfDay+"/"+bgNum+".jpg')";
   }; 
 }
-console.log(bgNum);
+// console.log(bgNum);
 setBg();
 
 
@@ -158,11 +158,8 @@ const humidity = document.querySelector('.humidity');
 const humidityDescription = document.querySelector('.humidity-description');
 
 
-
-const city = document.querySelector('.city');
-
 async function getWeather() {
-  const defaultCity = 'Omsk';
+  const defaultCity = (localStorage.getItem('city') ? localStorage.getItem('city') : 'Omsk');
   city.value = defaultCity;
   let url = `https://api.openweathermap.org/data/2.5/weather?q=${defaultCity}&lang=en&appid=e886c80087ae231689546cb8c0b8857b&units=metric`;
   let res = await fetch(url);
@@ -177,12 +174,17 @@ async function getWeather() {
   temperature.textContent = `${degrees}°C`;
   weatherDescription.textContent = data.weather[0].description;
 
-  // console.log(data.weather[0].id, data.wind.speed, data.main.temp);
 }
 getWeather();
 
+
+function setCity() {
+  const city = document.querySelector('.city');
+  city.addEventListener('change', getWeather);
+}
+
 city.addEventListener("change", async getWeather => {
-  url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=e886c80087ae231689546cb8c0b8857b&units=metric`;
+  let url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=e886c80087ae231689546cb8c0b8857b&units=metric`;
   let res = await fetch(url);
   let weatherData = await res.json();
   let degrees = Math.ceil(weatherData.main.temp);
@@ -190,6 +192,9 @@ city.addEventListener("change", async getWeather => {
   weatherIcon.classList.add(`owf-${weatherData.weather[0].id}`);
   temperature.textContent = `${degrees}°C`;
   weatherDescription.textContent = weatherData.weather[0].description;
+  if(weatherData) {
+    localStorage.setItem('city', city.value);
+  }
 });
 
 // quote of day
@@ -200,18 +205,20 @@ async function getQuotes() {
   const quotes = '/assets/data.json';
   const res = await fetch(quotes);
   const data = await res.json(); 
+
+  let randomQuoteIndex = Math.floor(Math.random() * (data.length - 2 + 1)) + 1;
+  console.log(randomQuoteIndex);
+  quote.innerHTML = data[randomQuoteIndex].text;  
+  author.innerHTML = data[randomQuoteIndex].author; 
     
-  quote.innerHTML = data[0].text;  
-  author.innerHTML = data[0].author; 
+  quote.innerHTML = data[randomQuoteIndex].text;  
+  author.innerHTML = data[randomQuoteIndex].author; 
 
   const btn = document.querySelector(".change-quote");
 
   btn.addEventListener("click", getQuotes => {
 
-  let randomQuoteIndex = Math.floor(Math.random() * (data.length - 2 + 1)) + 1;
-    console.log(randomQuoteIndex);
-    quote.innerHTML = data[randomQuoteIndex].text;  
-    author.innerHTML = data[randomQuoteIndex].author; 
+
     
   });
 }
@@ -225,9 +232,9 @@ let isPlay = false;
 let playNum = 0;  // track default
 
 
-// console.log(audio)
-let sounds = ['./assets/sounds/Aqua Caelestis.mp3', './assets/sounds/River Flows In You.mp3', './assets/sounds/Summer Wind.mp3', './assets/sounds/Ennio Morricone.mp3']
+let sounds = ["./assets/sounds/moi c'est.mp3", './assets/sounds/vibranium.mp3', './assets/sounds/motive.mp3', './assets/sounds/ring.mp3']
 
+//play audio
 function playAudio() {
   audio.currentTime = 0;
 
@@ -237,7 +244,8 @@ function playAudio() {
         playBtn.classList.add("pause");
         isPlay = true;
         audio.play();
-        stylePlayItems(1);
+        stylePlayItems(playNum);
+
       } else {
         playBtn.classList.remove("pause");
         audio.pause();
@@ -246,14 +254,14 @@ function playAudio() {
     })
 }
 playAudio();
-audio.src = './assets/sounds/Aqua Caelestis.mp3';
 
+//Next
 const btnNext = document.querySelector(".play-next");
 const btnPrev = document.querySelector(".play-prev");
 
 function playNext() {
-  btnNext.addEventListener('click', () => {
-    if (playNum === sounds.length) {
+    playNum++;
+    if (playNum > sounds.length - 1) {
       playNum = 0;
     } 
     audio.src = `${sounds[playNum]}`;
@@ -261,38 +269,82 @@ function playNext() {
     playBtn.classList.add("pause");
     audio.play();
     console.log(audio.src)
-    playNum++;
     stylePlayItems(playNum);
-  })
 }
-playNext();
+  btnNext.addEventListener('click', playNext);
 
+//Prev
 function playPrev() {
-  btnPrev.addEventListener('click', () => {
-    if (playNum == -1) {
+    playNum--;
+    if (playNum < 0) {
       playNum = sounds.length - 1;
-
-      styleItem.classList.add(".item-active")
     }
     audio.src = `${sounds[playNum]}`;
     isPlay = true;
     playBtn.classList.add("pause");
     audio.play();
-    let ids = playNum--;
-    stylePlayItems(ids);
-  })
+    stylePlayItems(playNum);
 }
-playPrev();
+btnPrev.addEventListener('click', playPrev);
 
+//autoplay
+audio.addEventListener('ended', playNext);
+
+//style active track
 function stylePlayItems(playNum) {
 
   for(let i = 0; i < playItem.length; i++) {
-    playItem[i].classList.remove('item-active');
+    playItem[i].classList.remove('active');
   }
-
-  playItem[playNum].classList.add("item-active");
+  playItem[playNum].classList.add("active");
 }
 
 //progress-bar
 const progressContainer = document.querySelector(".progress-container");
 const progress = document.querySelector(".progress");
+
+// function updateProgress(e) {
+  audio.addEventListener('timeupdate', (e) => {
+  const currentLength = document.querySelector('.current');
+  const audioLength = document.querySelector('.audio-length');
+  const{duration, currentTime} = e.srcElement;
+
+  const progressPercent = Math.floor((currentTime * 100) / duration);
+  progress.style.width = `${progressPercent}%`;
+  let minDuration = Math.floor(duration / 60);
+  let secDuration = Math.floor(duration % 60);
+  
+  if(duration) {
+    audioLength.innerText = `${minDuration}:${secDuration}`;
+  }
+  let minCurrentTime = Math.floor(currentTime / 60);
+  let secCurrentTime = Math.floor(currentTime % 60);
+  if(secCurrentTime < 10 ) {
+    secCurrentTime = `0${secCurrentTime}`;
+  }
+  currentLength.innerText = `${minCurrentTime}:${secCurrentTime}`;
+})
+// }
+// audio.addEventListener('timeupdate', updateProgress);
+
+ 
+//set progress
+function setProgress(e) {
+  const width = this.clientWidth;
+  const clickX = e.offsetX;
+  const duration = audio.duration;
+
+  audio.currentTime = (clickX / width) * duration;
+}
+progressContainer.addEventListener('click', setProgress);
+
+
+
+
+
+// setInterval(function () {
+//   const progressPrecent = (audio.currentTime / audio.duration) * 100 ;
+//   progress.style.width = `${progressPrecent}%`;
+// }, 1000);
+
+
