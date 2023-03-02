@@ -29,29 +29,34 @@ body {
   min-height: 220px;  
   padding: 20px;
 }
-
+/* PLAYER */
 .player-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 120px;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
+  margin: 10px auto;
+}
+.timeline {
+  display: flex;
+  justify-content: space-between;
 }
 .progress-container {
+  width: 100%;
+  height: 6px;
   display: flex;
-  align-items: center;
-  background: #E4E9ED;
+  background: #e4e9ed;
   border-radius: 5px;
-  width: 80%;
-  height: 5px;
-  margin: 0 0 15px 0;
+  align-items: center;
   cursor: pointer;
 }
 .progress {
-  background: #2B3C5B;
+  /* width: 150px; */
+  height: 6px;
   border-radius: 5px;
-  height: 5 px;
-  width: 100px;
+  background: #899ec6;
+
 }
 .play-list {
   text-align: left;
@@ -78,9 +83,9 @@ body {
   top: 2px;
   font-weight: 900;
 }
-
-.item-active::before {
-  color: #C5B358;
+.play-item.active {
+  color: #497888;
+  color: #899ec6;
 }
 
 .player-icon,
@@ -88,7 +93,7 @@ body {
 .change-quote {
   width: 32px;
   height: 32px;
-  background-size: 32px 32px;
+  background-size: 25px 25px;
   background-position: center center;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -131,7 +136,7 @@ body {
 .play-next {
   background-image: url("../assets/svg/play-next.svg");
 }
-
+/* WEATHER */
 .weather {
   display: flex;
   flex-direction: column;
@@ -189,7 +194,7 @@ body {
   min-height: 260px;  
   padding: 20px;
 }
-
+/* SLIDER */
 .slider-icon {
   position: absolute;
   top: 50%;
@@ -264,7 +269,7 @@ body {
   min-height: 160px;  
   padding: 20px;
 }
-
+/* QUOTE */
 .change-quote {
   margin-bottom: 30px;
   background-image: url("../assets/svg/reload.svg");  

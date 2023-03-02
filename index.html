@@ -3,32 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="assets/favicon.ico" rel="shortcut icon" />
-  <link rel="stylesheet" href="css/owfont-regular.css" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link href="./assets/favicon.ico" rel="shortcut icon" />
+  <link rel="stylesheet" href="./css/owfont-regular.css" />
+  <link rel="stylesheet" href="./css/style.css" />
   <title>momentum</title>
 </head>
 <body>
   <header class="header">
     <div class="player">
+      <audio src="./assets/sounds/moi c'est.mp3"></audio>
+      <!-- progress-bar -->
+      <div class="timeline">
+        <div class="current">00:00</div>
+        <div class="audio-length">00:00</div>
+      </div>
+      <div class="progress-container">
+        <div class="progress"></div> 
+       </div> 
+       <!-- next & prev button / player control-->
       <div class="player-controls">
               <button class="play-prev player-icon"></button>
         <button class="play player-icon">
-          <audio src="/assets/sounds/Aqua Caelestis.mp3" ></audio>
+          <audio src="./assets/sounds/moi c'est.mp3" ></audio>
         </button>
         <button class="play-next player-icon"></button>
        </div>
-       <div class="progress-container">
-        <div class="progress"></div>
-       </div>
-    
+      
+    <!-- PLAYLIST -->
       <ul class="play-list">
-        <li class="play-item">Aqua Caelestis</li>
-        <li class="play-item">River Flows In You</li>
-        <li class="play-item">Summer Wind</li>
-        <li class="play-item">Ennio Morricone</li>
+        <li class="play-item">Camélia Jordana - Moi c'est</li>
+        <li class="play-item">Andro - Vibranium</li>
+        <li class="play-item">Ariana Grande - Motive</li>
+        <li class="play-item">Selena Gomez - Ring</li>
       </ul>
     </div>
+    <!-- WEATHER -->
     <div class="weather">
       <input type="text" class="city" />
       <i class="weather-icon owf"></i>
@@ -53,6 +62,7 @@
       <input type="text" placeholder="[Enter name]" class="name" />
     </div>
   </main>
+    <!-- QUOTE -->
   <footer class="footer">
     <button class="change-quote"></button>
     <div>
@@ -60,7 +70,7 @@
       <div class="author"></div>
     </div>
   </footer>
-  <script type="module" src = "/assets/js/playList.js"></script>
-  <script type="module" src="/assets/js/script.js"></script>
+  <script type="module" src = "./assets/js/playList.js"></script>
+  <script type="module" src="./assets/js/script.js"></script>
 </body>
 </html>
