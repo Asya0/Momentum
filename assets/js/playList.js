@@ -1,23 +1,23 @@
-const playList = [
+const playList = [ 
     {      
-      title: 'Aqua Caelestis',
-      src: '../assets/sounds/Aqua Caelestis.mp3',
-      duration: '00:58'
-    },  
-    {      
-      title: 'River Flows In You',
-      src: '../assets/sounds/River Flows In You.mp3',
-      duration: '03:50'
+      title: "moi c'est camélia jordana.mp3",
+      src: "./assets/sounds/moi c'est.mp3",
+      duration: '02:49'
     },
-    {
-        title: 'Ennio Morricone',
-        src: '../assets/sounds/Ennio Morricone.mp3',
-        duration: '01:37'
+    {      
+      title: 'Vibranium Andro.mp3',
+      src: './assets/sounds/vibranium.mp3',
+      duration: '01:54'
     }, 
     {
-        title: 'Summer Wind',
-        src: '../assets/sounds/Summer Wind.mp3',
-        duration: '01:50'
+        title: 'Ariana Grande - Motive',
+        src: './assets/sounds/motive.mp3',
+        duration: '02:48'
+    }, 
+    {
+        title: 'Selena Gomez - Ring',
+        src: './assets/sounds/ring.mp3',
+        duration: '02:28'
     }
   ]
   export default playList;
